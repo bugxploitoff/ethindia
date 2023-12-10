@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import getWeb3 from '../../utils/getWeb3';
