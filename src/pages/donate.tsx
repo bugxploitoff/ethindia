@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import getWeb3 from '../../utils/getWeb3';
 
-const ind = () => {
+const donate = () => {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [type, setType] = useState("");
@@ -164,4 +164,4 @@ const ind = () => {
   )
 }
 
-export default ind
+export default donate
