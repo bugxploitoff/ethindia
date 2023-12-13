@@ -1,25 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import getWeb3 from '../../utils/getWeb3';
-import { AnonAadhaarPCD } from "anon-aadhaar-pcd";
-import { FunctionComponent } from "react";
+import { AnonAadhaarPCD } from 'anon-aadhaar-pcd';
+import { FunctionComponent } from 'react';
 
-const truncate = (str: string, max: number) => {
-  return str.length > max ? str.substring(0, max) + "..." : str;
-};
-
-type RatingProps = {
-  pcd: AnonAadhaarPCD;
-};
-
-
+// Extend the Window interface
 interface WindowWithEthereum extends Window {
   ethereum?: any; // Adjust the type accordingly based on your requirements
 }
 
-
-const CEvents: FunctionComponent<RatingProps> = ({ pcd })=> {
-  const [web3, setWeb3] = useState(null);
+const CEvents: FunctionComponent<RatingProps> = ({ pcd }) => {
+  const [web3, setWeb3] = useState<any>(null); // Adjust the type accordingly based on your requirements
   const [formData, setFormData] = useState({
     name: '',
     supportType: '',
@@ -27,13 +18,10 @@ const CEvents: FunctionComponent<RatingProps> = ({ pcd })=> {
     description: '',
   });
 
-  
-
   const enableMetaMask = async () => {
     try {
       const windowWithEthereum = window as WindowWithEthereum;
 
-      // Check if ethereum is available on window
       if (windowWithEthereum.ethereum) {
         await windowWithEthereum.ethereum.enable();
         const provider = new ethers.providers.Web3Provider(windowWithEthereum.ethereum);
@@ -47,52 +35,48 @@ const CEvents: FunctionComponent<RatingProps> = ({ pcd })=> {
       console.error('Error enabling MetaMask:', error.message);
     }
   };
-  
 
- useEffect(() => {
-  const initWeb3 = async () => {
-    try {
-      const web3Instance = await getWeb3();
-      enableMetaMask();
-      setWeb3(web3Instance);
-    } catch (error) {
-      console.error('Error initializing web3:', error.message);
-    }
-  };
-
-  initWeb3();
-}, []);
+  useEffect(() => {
+    const initWeb3 = async () => {
+      try {
+        const web3Instance = await getWeb3();
+        enableMetaMask();
+        setWeb3(web3Instance);
+      } catch (error) {
+        console.error('Error initializing web3:', error.message);
+      }
+    };
 
     initWeb3();
   }, []);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-  
+
     try {
       if (!web3) {
         console.error('Web3 not initialized. Please connect to MetaMask.');
         return;
       }
-  
+
       // Prepare the data for submission
       const dataForSubmission = {
         name: formData.name,
         email: formData.supportType,
         location: formData.location,
         description: formData.description,
-        pcd: "FUNDDAPP",
+        pcd: 'FUNDDAPP',
       };
-  
+
       // Convert the data to a JSON string
       const content = JSON.stringify(dataForSubmission);
-  
+
       // Sign the content with MetaMask signer
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const signature = await signer.signMessage(ethers.utils.toUtf8Bytes(content));
-  
-      console.log(dataForSubmission)
+
+      console.log(dataForSubmission);
       const response = await fetch('/api/USERINFO', {
         method: 'POST',
         headers: {
@@ -103,12 +87,12 @@ const CEvents: FunctionComponent<RatingProps> = ({ pcd })=> {
           signature,
         }),
       });
-  
+
       const responseData = await response.json();
-  
+
       if (responseData.success) {
         console.log(responseData.message);
-        alert("DATA CREATED");
+        alert('DATA CREATED');
         // Optionally, you can perform additional actions after a successful submission
       } else {
         console.error(responseData.error);
@@ -118,7 +102,7 @@ const CEvents: FunctionComponent<RatingProps> = ({ pcd })=> {
     }
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -215,3 +199,9 @@ const CEvents: FunctionComponent<RatingProps> = ({ pcd })=> {
 };
 
 export default CEvents;
+
+// Adjust the type of web3 state and other types accordingly based on your requirements
+type RatingProps = {
+  pcd: AnonAadhaarPCD;
+};
+
