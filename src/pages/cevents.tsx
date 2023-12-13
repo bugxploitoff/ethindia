@@ -43,7 +43,7 @@ const CEvents: FunctionComponent<RatingProps> = ({ pcd }) => {
         enableMetaMask();
         setWeb3(web3Instance);
       } catch (error) {
-        console.error('Error initializing web3:', error.message);
+        console.error('Error initializing web3:');
       }
     };
 
