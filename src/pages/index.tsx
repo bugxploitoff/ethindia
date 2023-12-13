@@ -5,6 +5,7 @@ import {
   useAnonAadhaar,
 } from "anon-aadhaar-react";
 import { useEffect } from "react";
+import Link from "next/link";
 
 export default function Home() {
   // Use the Country Identity hook to get the status of the user.
@@ -86,9 +87,9 @@ export default function Home() {
                     </p>
                   </div>
                   <div className="flex justify-center gap-3 mt-10 lg:justify-start">
-                    <a className="inline-flex items-center justify-center text-sm font-semibold text-black duration-200 hover:text-blue-500 focus:outline-none focus-visible:outline-gray-600" href="/withdraw">
+                    <Link className="inline-flex items-center justify-center text-sm font-semibold text-black duration-200 hover:text-blue-500 focus:outline-none focus-visible:outline-gray-600" href="/withdraw">
                       <span> NEED FUNDS &nbsp; → </span>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
