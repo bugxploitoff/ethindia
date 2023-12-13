@@ -32,7 +32,7 @@ const CEvents: FunctionComponent<RatingProps> = ({ pcd }) => {
         console.error('MetaMask not found on window.ethereum');
       }
     } catch (error) {
-      console.error('Error enabling MetaMask:', error.message);
+      console.error('Error enabling MetaMask:');
     }
   };
 
