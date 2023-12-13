@@ -1,4 +1,3 @@
-"use client"
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import getWeb3 from '../../utils/getWeb3';
@@ -49,20 +48,19 @@ const CEvents: FunctionComponent<RatingProps> = ({ pcd })=> {
   };
   
 
-useEffect(() => {
-  const initWeb3 = async () => {
-    try {
-      const web3Instance = await getWeb3();
-      await enableMetaMask(); // Wait for enableMetaMask to finish before setting the web3 instance
-      setWeb3(web3Instance);
-    } catch (error) {
-      console.error('Error initializing web3:', error.message);
-    }
-  };
+  useEffect(() => {
+    const initWeb3 = async () => {
+      try {
+        const web3Instance = await getWeb3();
+        enableMetaMask();
+        setWeb3(web3Instance);
+      } catch (error) {
+        console.error('Error initializing web3:', error.message);
+      }
+    };
 
-  initWeb3();
-}, [enableMetaMask]); // Include enableMetaMask in the dependency array
-
+    initWeb3();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
