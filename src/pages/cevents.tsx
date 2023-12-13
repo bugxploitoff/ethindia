@@ -13,6 +13,10 @@ type RatingProps = {
 };
 
 
+interface WindowWithEthereum extends Window {
+  ethereum?: any; // Adjust the type accordingly based on your requirements
+}
+
 
 const CEvents: FunctionComponent<RatingProps> = ({ pcd })=> {
   const [web3, setWeb3] = useState(null);
@@ -27,37 +31,37 @@ const CEvents: FunctionComponent<RatingProps> = ({ pcd })=> {
 
   const enableMetaMask = async () => {
     try {
-      await window.ethereum.enable();
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-  
-      // Get the user's address
-      const userAddress = await signer.getAddress();
-      console.log('User Address:', userAddress);
-  
-      // Prepare the message data (include a timestamp or unique identifier)
-      const timestamp = Date.now();
-      const message = `Sign in request for user ${formData.name} at ${timestamp}`;
-  
-      // Use the signer to sign the message
-      const signature = await signer.signMessage(ethers.utils.toUtf8Bytes(message));
-      console.log('Signature:', signature);
+      const windowWithEthereum = window as WindowWithEthereum;
+
+      // Check if ethereum is available on window
+      if (windowWithEthereum.ethereum) {
+        await windowWithEthereum.ethereum.enable();
+        const provider = new ethers.providers.Web3Provider(windowWithEthereum.ethereum);
+        const signer = provider.getSigner();
+
+        // Rest of your code
+      } else {
+        console.error('MetaMask not found on window.ethereum');
+      }
     } catch (error) {
       console.error('Error enabling MetaMask:', error.message);
     }
   };
   
 
-  useEffect(() => {
-    const initWeb3 = async () => {
-      try {
-        const web3Instance = await getWeb3();
-        enableMetaMask();
-        setWeb3(web3Instance);
-      } catch (error) {
-        console.error('Error initializing web3:', error.message);
-      }
-    };
+ useEffect(() => {
+  const initWeb3 = async () => {
+    try {
+      const web3Instance = await getWeb3();
+      enableMetaMask();
+      setWeb3(web3Instance);
+    } catch (error) {
+      console.error('Error initializing web3:', error.message);
+    }
+  };
+
+  initWeb3();
+}, []);
 
     initWeb3();
   }, []);
